@@ -4,6 +4,7 @@ import { Search, FileText, Settings, BarChart, CheckCircle, Clock, ArrowRight, U
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { processAPI } from '../services/api';
+import { staticProcessData } from '../data/staticData';
 
 const HowWeWorkPage = () => {
   const [processData, setProcessData] = useState(null);
@@ -16,7 +17,9 @@ const HowWeWorkPage = () => {
         const response = await processAPI.getProcessDetails();
         setProcessData(response.data);
       } catch (error) {
-        console.error('Error fetching process data:', error);
+        console.error('Error fetching process data, using static data:', error);
+        // Use static data as fallback when API is unavailable
+        setProcessData(staticProcessData);
       } finally {
         setLoading(false);
       }
@@ -25,13 +28,15 @@ const HowWeWorkPage = () => {
     fetchProcess();
   }, []);
 
-  if (loading || !processData) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-deep-blue text-white flex items-center justify-center">
         <div className="text-cyan-highlight text-xl">Loading...</div>
       </div>
     );
   }
+
+  const displayProcessData = processData || staticProcessData;
 
   const stepIcons = {
     Search,
@@ -51,7 +56,7 @@ const HowWeWorkPage = () => {
             How We <span className="bg-gradient-to-r from-security-blue to-cyan-highlight bg-clip-text text-transparent">Work</span>
           </h1>
           <p className="text-xl text-light-gray max-w-3xl mx-auto">
-            {processData.overview.description}
+            {displayProcessData.overview.description}
           </p>
         </div>
       </section>
@@ -60,7 +65,7 @@ const HowWeWorkPage = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-16">
-            {processData.steps.map((step, i) => {
+            {displayProcessData.steps.map((step, i) => {
               const StepIcon = stepIcons[step.icon] || Settings;
               return (
                 <div
@@ -70,7 +75,7 @@ const HowWeWorkPage = () => {
                     activeStep === i ? 'transform scale-105' : ''
                   }`}
                 >
-                  {i < processData.steps.length - 1 && (
+                  {i < displayProcessData.steps.length - 1 && (
                     <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-security-blue to-cyan-highlight transform translate-x-4 z-0"></div>
                   )}
                   <div className={`bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl border transition-all duration-300 ${
@@ -95,21 +100,21 @@ const HowWeWorkPage = () => {
           </div>
 
           {/* Detailed Step Information */}
-          {processData.steps[activeStep] && (
+          {displayProcessData.steps[activeStep] && (
             <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 md:p-12 border border-slate-700">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
                   <h3 className="text-3xl font-bold mb-6 text-cyan-highlight">
-                    {processData.steps[activeStep].title}
+                    {displayProcessData.steps[activeStep].title}
                   </h3>
                   <p className="text-light-gray mb-6">
-                    {processData.steps[activeStep].description}
+                    {displayProcessData.steps[activeStep].description}
                   </p>
 
                   <div className="mb-6">
                     <h4 className="text-xl font-bold mb-3 text-light-gray">Activities</h4>
                     <ul className="space-y-2">
-                      {processData.steps[activeStep].activities.map((activity, i) => (
+                      {displayProcessData.steps[activeStep].activities.map((activity, i) => (
                         <li key={i} className="flex items-start space-x-3">
                           <CheckCircle className="w-5 h-5 text-trust-green flex-shrink-0 mt-0.5" />
                           <span className="text-medium-gray">{activity}</span>
@@ -123,7 +128,7 @@ const HowWeWorkPage = () => {
                   <div className="mb-6">
                     <h4 className="text-xl font-bold mb-3 text-light-gray">Deliverables</h4>
                     <ul className="space-y-2">
-                      {processData.steps[activeStep].deliverables.map((deliverable, i) => (
+                      {displayProcessData.steps[activeStep].deliverables.map((deliverable, i) => (
                         <li key={i} className="flex items-start space-x-3">
                           <div className="w-2 h-2 bg-cyan-highlight rounded-full mt-2 flex-shrink-0"></div>
                           <span className="text-medium-gray">{deliverable}</span>
@@ -137,14 +142,14 @@ const HowWeWorkPage = () => {
                       <Clock className="w-5 h-5 text-cyan-highlight" />
                       <span className="font-semibold text-light-gray">Timeline</span>
                     </div>
-                    <p className="text-medium-gray">{processData.steps[activeStep].timeline}</p>
+                    <p className="text-medium-gray">{displayProcessData.steps[activeStep].timeline}</p>
                     
                     <div className="mt-4 pt-4 border-t border-slate-600">
                       <div className="flex items-center space-x-2">
                         <Users className="w-5 h-5 text-cyan-highlight" />
                         <span className="font-semibold text-light-gray">Communication</span>
                       </div>
-                      <p className="text-medium-gray mt-1">{processData.steps[activeStep].communication}</p>
+                      <p className="text-medium-gray mt-1">{displayProcessData.steps[activeStep].communication}</p>
                     </div>
                   </div>
                 </div>
@@ -167,7 +172,7 @@ const HowWeWorkPage = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {processData.engagementModels.map((model, i) => (
+            {displayProcessData.engagementModels.map((model, i) => (
               <div key={i} className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl border border-slate-700">
                 <h3 className="text-2xl font-bold mb-4 text-cyan-highlight">{model.type}</h3>
                 <p className="text-light-gray mb-6">{model.description}</p>
@@ -218,7 +223,7 @@ const HowWeWorkPage = () => {
               <Shield className="w-12 h-12 text-cyan-highlight mb-4" />
               <h3 className="text-xl font-bold mb-4 text-light-gray">Communication</h3>
               <ul className="space-y-2">
-                {processData.whatToExpect.communication.map((item, i) => (
+                {displayProcessData.whatToExpect.communication.map((item, i) => (
                   <li key={i} className="flex items-start space-x-2 text-medium-gray">
                     <CheckCircle className="w-5 h-5 text-trust-green flex-shrink-0 mt-0.5" />
                     <span>{item}</span>
@@ -231,7 +236,7 @@ const HowWeWorkPage = () => {
               <Settings className="w-12 h-12 text-cyan-highlight mb-4" />
               <h3 className="text-xl font-bold mb-4 text-light-gray">Approach</h3>
               <ul className="space-y-2">
-                {processData.whatToExpect.approach.map((item, i) => (
+                {displayProcessData.whatToExpect.approach.map((item, i) => (
                   <li key={i} className="flex items-start space-x-2 text-medium-gray">
                     <CheckCircle className="w-5 h-5 text-trust-green flex-shrink-0 mt-0.5" />
                     <span>{item}</span>
@@ -244,7 +249,7 @@ const HowWeWorkPage = () => {
               <Users className="w-12 h-12 text-cyan-highlight mb-4" />
               <h3 className="text-xl font-bold mb-4 text-light-gray">Support</h3>
               <ul className="space-y-2">
-                {processData.whatToExpect.support.map((item, i) => (
+                {displayProcessData.whatToExpect.support.map((item, i) => (
                   <li key={i} className="flex items-start space-x-2 text-medium-gray">
                     <CheckCircle className="w-5 h-5 text-trust-green flex-shrink-0 mt-0.5" />
                     <span>{item}</span>
@@ -269,7 +274,7 @@ const HowWeWorkPage = () => {
           </div>
 
           <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {processData.successMetrics.map((metric, i) => (
+            {displayProcessData.successMetrics.map((metric, i) => (
               <div key={i} className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 text-center">
                 <CheckCircle className="w-8 h-8 text-trust-green mx-auto mb-3" />
                 <p className="text-light-gray">{metric}</p>

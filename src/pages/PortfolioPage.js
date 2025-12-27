@@ -4,6 +4,7 @@ import { Mail, Shield, Server, Globe, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { portfolioAPI } from '../services/api';
+import { staticPortfolio } from '../data/staticData';
 
 const PortfolioPage = () => {
   const [portfolioItems, setPortfolioItems] = useState([]);
@@ -15,7 +16,9 @@ const PortfolioPage = () => {
         const response = await portfolioAPI.getAllPortfolioItems();
         setPortfolioItems(response.data);
       } catch (error) {
-        console.error('Error fetching portfolio:', error);
+        console.error('Error fetching portfolio, using static data:', error);
+        // Use static data as fallback when API is unavailable
+        setPortfolioItems(staticPortfolio);
       } finally {
         setLoading(false);
       }
@@ -40,6 +43,8 @@ const PortfolioPage = () => {
     );
   }
 
+  const displayPortfolio = portfolioItems.length > 0 ? portfolioItems : staticPortfolio;
+
   return (
     <div className="min-h-screen bg-deep-blue text-white">
       <Navbar />
@@ -60,7 +65,7 @@ const PortfolioPage = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {portfolioItems.map((item) => {
+            {displayPortfolio.map((item) => {
               const Icon = categoryIconMap[item.category] || Shield;
               return (
                 <div

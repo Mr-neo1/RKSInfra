@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle, Clock, Users, Shield, Mail, Server, Globe, Shi
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { servicesAPI } from '../services/api';
+import { staticServices } from '../data/staticData';
 
 const iconMap = {
   Shield,
@@ -31,7 +32,11 @@ const ServiceDetailPage = () => {
         setService(serviceResponse.data);
         setAllServices(allServicesResponse.data);
       } catch (error) {
-        console.error('Error fetching service:', error);
+        console.error('Error fetching service, using static data:', error);
+        // Use static data as fallback when API is unavailable
+        const foundService = staticServices.find(s => s.id === parseInt(id));
+        setService(foundService || null);
+        setAllServices(staticServices);
       } finally {
         setLoading(false);
       }

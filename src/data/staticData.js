@@ -326,3 +326,532 @@ export const staticServices = [
   }
 ];
 
+export const staticPortfolio = [
+  {
+    id: 1,
+    title: "E-commerce Email Deliverability Recovery",
+    category: "Email Deliverability",
+    description: "Recovered sender reputation and fixed authentication issues, increasing inbox placement from 65% to 98%.",
+    image: "/images/portfolio/email-deliverability.jpg",
+    technologies: ["SPF", "DKIM", "DMARC", "Reputation Management"],
+    client: "E-commerce Platform",
+    year: 2024
+  },
+  {
+    id: 2,
+    title: "Healthcare Network Security Implementation",
+    category: "Network Security",
+    description: "Deployed enterprise firewall with 24/7 monitoring, achieving zero security incidents in 18 months.",
+    image: "/images/portfolio/network-security.jpg",
+    technologies: ["Sophos Firewall", "IDS/IPS", "Network Monitoring"],
+    client: "Healthcare Provider",
+    year: 2023
+  },
+  {
+    id: 3,
+    title: "SaaS Email Infrastructure Migration",
+    category: "Email Infrastructure",
+    description: "Migrated to Mailcow infrastructure, achieving 99.8% delivery rate and reducing costs by 60%.",
+    image: "/images/portfolio/email-infrastructure.jpg",
+    technologies: ["Mailcow", "SMTP", "Docker", "Monitoring"],
+    client: "SaaS Startup",
+    year: 2024
+  },
+  {
+    id: 4,
+    title: "Financial Services Email Authentication",
+    category: "DNS & Authentication",
+    description: "Complete SPF/DKIM/DMARC implementation achieving 100% authentication and blocking 90% of phishing attempts.",
+    image: "/images/portfolio/email-authentication.jpg",
+    technologies: ["SPF", "DKIM", "DMARC", "DNS Management"],
+    client: "Financial Services Firm",
+    year: 2023
+  },
+  {
+    id: 5,
+    title: "Manufacturing Network Security Overhaul",
+    category: "Network Security",
+    description: "Complete network security overhaul with firewall, VPN, and 24/7 management, achieving 99.9% uptime.",
+    image: "/images/portfolio/network-overhaul.jpg",
+    technologies: ["Sophos Firewall", "VPN", "Network Monitoring"],
+    client: "Manufacturing Company",
+    year: 2023
+  },
+  {
+    id: 6,
+    title: "Marketing Agency Multi-Domain Reputation Recovery",
+    category: "Email Deliverability",
+    description: "Recovered sender reputation across multiple domains, increasing campaign success rate by 70%.",
+    image: "/images/portfolio/reputation-recovery.jpg",
+    technologies: ["Reputation Management", "SPF/DKIM/DMARC", "IP Warming"],
+    client: "Marketing Agency",
+    year: 2024
+  }
+];
+
+export const staticProcessData = {
+  overview: {
+    title: "Our Proven Process",
+    description: "We follow a systematic approach that ensures successful outcomes, clear communication, and measurable results."
+  },
+  steps: [
+    {
+      step: 1,
+      title: "Discovery & Audit",
+      icon: "Search",
+      duration: "1-3 days",
+      description: "We start by understanding your current setup, challenges, and goals.",
+      activities: [
+        "Free initial consultation call",
+        "Comprehensive email/network audit",
+        "Security assessment",
+        "Performance analysis",
+        "Infrastructure review"
+      ],
+      deliverables: [
+        "Detailed audit report",
+        "Identified issues and vulnerabilities",
+        "Risk assessment",
+        "Recommendations document",
+        "Proposed solution outline"
+      ],
+      timeline: "1-3 days",
+      communication: "Daily updates via email/phone"
+    },
+    {
+      step: 2,
+      title: "Strategy & Planning",
+      icon: "FileText",
+      duration: "2-5 days",
+      description: "We design a custom solution tailored to your specific needs and requirements.",
+      activities: [
+        "Solution architecture design",
+        "Technology selection",
+        "Implementation plan creation",
+        "Timeline and milestone definition",
+        "Resource planning"
+      ],
+      deliverables: [
+        "Detailed project plan",
+        "Technical specifications",
+        "Timeline with milestones",
+        "Cost breakdown",
+        "Risk mitigation plan"
+      ],
+      timeline: "2-5 days",
+      communication: "Review meeting + detailed proposal"
+    },
+    {
+      step: 3,
+      title: "Implementation",
+      icon: "Settings",
+      duration: "1-4 weeks",
+      description: "We execute the plan with minimal disruption to your operations.",
+      activities: [
+        "Configuration and setup",
+        "Testing and validation",
+        "Migration (if applicable)",
+        "Security hardening",
+        "Performance optimization"
+      ],
+      deliverables: [
+        "Fully configured systems",
+        "Testing results",
+        "Documentation",
+        "Training materials",
+        "Handover documentation"
+      ],
+      timeline: "1-4 weeks (varies by project)",
+      communication: "Daily progress updates, weekly status meetings"
+    },
+    {
+      step: 4,
+      title: "Monitor & Optimize",
+      icon: "BarChart",
+      duration: "Ongoing",
+      description: "We continuously monitor, optimize, and improve your infrastructure.",
+      activities: [
+        "24/7 monitoring",
+        "Performance tracking",
+        "Security monitoring",
+        "Regular optimization",
+        "Proactive issue detection"
+      ],
+      deliverables: [
+        "Monthly performance reports",
+        "Security status updates",
+        "Optimization recommendations",
+        "Incident reports (if any)",
+        "Ongoing support"
+      ],
+      timeline: "Ongoing",
+      communication: "Monthly reports, immediate alerts for critical issues"
+    }
+  ],
+  engagementModels: [
+    {
+      type: "Project-Based",
+      description: "One-time implementation or fix for specific issues",
+      bestFor: "Specific problems, migrations, one-time setups",
+      timeline: "1-4 weeks typically",
+      pricing: "Fixed project fee",
+      includes: [
+        "Complete implementation",
+        "Documentation",
+        "30-day post-implementation support",
+        "Training"
+      ]
+    },
+    {
+      type: "Hourly Consulting",
+      description: "Pay-as-you-go expert guidance and troubleshooting",
+      bestFor: "Occasional needs, troubleshooting, expert advice",
+      timeline: "As needed",
+      pricing: "Hourly rate",
+      includes: [
+        "Expert consultation",
+        "Troubleshooting",
+        "Guidance and recommendations",
+        "Quick fixes"
+      ]
+    },
+    {
+      type: "Managed Services",
+      description: "Ongoing 24/7 management and support",
+      bestFor: "Continuous infrastructure management, 24/7 needs",
+      timeline: "Ongoing monthly",
+      pricing: "Monthly retainer",
+      includes: [
+        "24/7 monitoring",
+        "Proactive management",
+        "Priority support",
+        "Regular optimization",
+        "Security updates",
+        "Performance tuning"
+      ]
+    }
+  ],
+  whatToExpect: {
+    communication: [
+      "Clear, jargon-free explanations",
+      "Regular status updates",
+      "Transparent timelines",
+      "No hidden fees"
+    ],
+    approach: [
+      "Hands-on, practical solutions",
+      "Production-ready implementations",
+      "Proven methodologies",
+      "Results-driven focus"
+    ],
+    support: [
+      "Rapid response times",
+      "24/7 availability for critical issues",
+      "Comprehensive documentation",
+      "Ongoing optimization"
+    ]
+  },
+  successMetrics: [
+    "Deliverability rates",
+    "Security incident reduction",
+    "Uptime improvements",
+    "Performance metrics",
+    "Cost savings",
+    "Client satisfaction"
+  ]
+};
+
+export const staticSolutions = [
+  {
+    id: 1,
+    category: "Email Deliverability",
+    title: "Fix Emails Going to Spam",
+    problem: "Your marketing emails are landing in spam folders instead of inboxes, reducing open rates and conversions.",
+    solution: "We diagnose and fix authentication issues, optimize sender reputation, and ensure proper SPF/DKIM/DMARC configuration.",
+    steps: [
+      "Audit current email setup and authentication records",
+      "Fix SPF, DKIM, and DMARC misconfigurations",
+      "Improve IP and domain reputation",
+      "Optimize email content and sending practices",
+      "Monitor and maintain inbox placement rates"
+    ],
+    timeframe: "2-5 days for basic fixes, 1-2 weeks for full optimization",
+    technologies: ["SPF", "DKIM", "DMARC", "Email Testing Tools", "Reputation Monitoring"],
+    industries: ["E-commerce", "Marketing Agencies", "SaaS", "Newsletters"]
+  },
+  {
+    id: 2,
+    category: "Email Deliverability",
+    title: "Improve Transactional Email Delivery",
+    problem: "Critical transactional emails (order confirmations, passwords) are delayed or not reaching customers.",
+    solution: "Set up dedicated transactional email infrastructure with proper authentication and monitoring.",
+    steps: [
+      "Configure dedicated SMTP server for transactional emails",
+      "Set up proper authentication (SPF/DKIM/DMARC)",
+      "Implement email queuing and retry logic",
+      "Set up monitoring and alerting",
+      "Optimize sending rates and IP warming"
+    ],
+    timeframe: "3-7 days",
+    technologies: ["SMTP", "Mailcow", "Postfix", "Monitoring Tools"],
+    industries: ["E-commerce", "SaaS", "Financial Services", "Healthcare"]
+  },
+  {
+    id: 3,
+    category: "Network Security",
+    title: "Enterprise Firewall Configuration",
+    problem: "Your network lacks proper firewall protection, leaving you vulnerable to attacks.",
+    solution: "Configure and harden enterprise-grade firewall with proper rules, monitoring, and threat prevention.",
+    steps: [
+      "Assess current network architecture and security needs",
+      "Configure Sophos or enterprise firewall",
+      "Set up firewall rules and access policies",
+      "Implement intrusion prevention systems",
+      "Configure monitoring and alerting",
+      "Provide documentation and training"
+    ],
+    timeframe: "1-2 weeks",
+    technologies: ["Sophos Firewall", "IDS/IPS", "VPN", "Network Monitoring"],
+    industries: ["All Industries", "Healthcare", "Financial Services", "Manufacturing"]
+  },
+  {
+    id: 4,
+    category: "Network Security",
+    title: "Secure Remote Access Setup",
+    problem: "Employees need secure remote access but current VPN setup is unreliable or insecure.",
+    solution: "Implement secure VPN solution with proper authentication and access controls.",
+    steps: [
+      "Design secure remote access architecture",
+      "Configure VPN server (OpenVPN, WireGuard, or Sophos VPN)",
+      "Set up multi-factor authentication",
+      "Configure access policies and user management",
+      "Test and optimize performance",
+      "Provide user training and documentation"
+    ],
+    timeframe: "3-5 days",
+    technologies: ["VPN", "OpenVPN", "WireGuard", "MFA", "Sophos"],
+    industries: ["All Industries", "Remote Teams", "Healthcare", "Financial Services"]
+  },
+  {
+    id: 5,
+    category: "Email Infrastructure",
+    title: "Mail Server Setup & Migration",
+    problem: "Need reliable email server or migrating from unreliable provider.",
+    solution: "Deploy and configure Mailcow or custom mail server with proper security and monitoring.",
+    steps: [
+      "Plan server architecture and requirements",
+      "Deploy Mailcow or custom mail server",
+      "Configure domains and email accounts",
+      "Set up authentication (SPF/DKIM/DMARC)",
+      "Migrate existing emails and data",
+      "Configure backups and monitoring",
+      "Test and optimize performance"
+    ],
+    timeframe: "1-2 weeks",
+    technologies: ["Mailcow", "Postfix", "Dovecot", "Docker", "Backup Solutions"],
+    industries: ["All Industries", "SMB", "Enterprise", "Government"]
+  },
+  {
+    id: 6,
+    category: "DNS & Authentication",
+    title: "Complete Email Authentication Setup",
+    problem: "Email authentication not properly configured, causing deliverability issues.",
+    solution: "Complete SPF, DKIM, and DMARC setup with proper monitoring and reporting.",
+    steps: [
+      "Audit current DNS records",
+      "Configure SPF records correctly",
+      "Set up DKIM signing",
+      "Implement DMARC policy",
+      "Configure DMARC reporting",
+      "Monitor and adjust policies",
+      "Provide ongoing management"
+    ],
+    timeframe: "2-3 days",
+    technologies: ["SPF", "DKIM", "DMARC", "DNS Management"],
+    industries: ["All Industries"]
+  },
+  {
+    id: 7,
+    category: "Server Management",
+    title: "24/7 Server Monitoring & Management",
+    problem: "Servers need constant monitoring but lack dedicated IT staff.",
+    solution: "Provide 24/7 monitoring, proactive management, and rapid incident response.",
+    steps: [
+      "Set up comprehensive monitoring systems",
+      "Configure alerting for critical issues",
+      "Implement automated backups",
+      "Set up security patch management",
+      "Provide 24/7 support and response",
+      "Regular performance optimization"
+    ],
+    timeframe: "Ongoing (setup: 3-5 days)",
+    technologies: ["Monitoring Tools", "Backup Solutions", "Automation", "Hetzner", "NetShop"],
+    industries: ["All Industries", "SaaS", "E-commerce", "Enterprise"]
+  },
+  {
+    id: 8,
+    category: "Phishing Protection",
+    title: "Email Threat Protection & Anti-Phishing",
+    problem: "Receiving phishing emails and need protection against email-based threats.",
+    solution: "Implement multi-layered email security to detect and block phishing attempts.",
+    steps: [
+      "Assess current email security posture",
+      "Configure advanced email authentication",
+      "Set up threat detection systems",
+      "Implement brand protection",
+      "Configure incident response procedures",
+      "Provide user training"
+    ],
+    timeframe: "1 week",
+    technologies: ["DMARC", "SPF", "DKIM", "Threat Intelligence", "Email Security"],
+    industries: ["All Industries", "Financial Services", "Healthcare", "Government"]
+  }
+];
+
+export const staticCaseStudies = [
+  {
+    id: 1,
+    title: "E-commerce Email Deliverability Recovery",
+    client: "Major E-commerce Platform",
+    industry: "E-commerce",
+    service: "Email Deliverability",
+    challenge: "Marketing emails were landing in spam, resulting in 65% inbox placement rate and significant revenue loss.",
+    solution: "Comprehensive email authentication setup, IP reputation recovery, and sending practice optimization.",
+    results: {
+      inboxRate: "98%",
+      openRate: "+45%",
+      revenue: "+$2.5M annually",
+      timeframe: "3 weeks"
+    },
+    metrics: [
+      { label: "Before: Inbox Rate", value: "65%" },
+      { label: "After: Inbox Rate", value: "98%" },
+      { label: "Open Rate Increase", value: "+45%" },
+      { label: "Revenue Impact", value: "+$2.5M/year" }
+    ],
+    technologies: ["SPF", "DKIM", "DMARC", "Reputation Management"],
+    testimonial: "RKS Infra transformed our email deliverability. Our marketing campaigns now reach customers reliably, directly impacting our bottom line.",
+    year: 2024
+  },
+  {
+    id: 2,
+    title: "Healthcare Network Security Implementation",
+    client: "Regional Healthcare Provider",
+    industry: "Healthcare",
+    service: "Network Security",
+    challenge: "Multiple security incidents per month, HIPAA compliance concerns, and vulnerable network infrastructure.",
+    solution: "Enterprise firewall deployment, network segmentation, intrusion prevention, and 24/7 monitoring.",
+    results: {
+      securityIncidents: "Zero in 18 months",
+      compliance: "100% HIPAA compliant",
+      uptime: "99.9%",
+      timeframe: "2 months"
+    },
+    metrics: [
+      { label: "Before: Security Incidents", value: "12+/month" },
+      { label: "After: Security Incidents", value: "Zero (18 months)" },
+      { label: "Network Uptime", value: "99.9%" },
+      { label: "Compliance Status", value: "100% HIPAA" }
+    ],
+    technologies: ["Sophos Firewall", "IDS/IPS", "Network Segmentation", "24/7 Monitoring"],
+    testimonial: "Since implementing RKS Infra's security solution, we've had zero security breaches. Their expertise gave us peace of mind and full HIPAA compliance.",
+    year: 2023
+  },
+  {
+    id: 3,
+    title: "SaaS Email Infrastructure Migration",
+    client: "SaaS Startup",
+    industry: "SaaS",
+    service: "Email Infrastructure",
+    challenge: "Unreliable email provider causing transaction email delays and user complaints.",
+    solution: "Custom Mailcow deployment, seamless migration, and optimized sending infrastructure.",
+    results: {
+      deliveryRate: "99.8%",
+      latency: "<1 second",
+      cost: "-60%",
+      timeframe: "2 weeks"
+    },
+    metrics: [
+      { label: "Email Delivery Rate", value: "99.8%" },
+      { label: "Average Latency", value: "<1 second" },
+      { label: "Cost Reduction", value: "-60%" },
+      { label: "User Complaints", value: "-95%" }
+    ],
+    technologies: ["Mailcow", "SMTP", "Docker", "Monitoring"],
+    testimonial: "The migration was seamless. Our transactional emails now deliver instantly, and we've cut costs significantly. RKS Infra made it look easy.",
+    year: 2024
+  },
+  {
+    id: 4,
+    title: "Financial Services Email Authentication",
+    client: "Financial Services Firm",
+    industry: "Financial Services",
+    service: "DNS & Authentication",
+    challenge: "Email authentication failures causing compliance issues and client trust concerns.",
+    solution: "Complete SPF/DKIM/DMARC implementation with strict policies and monitoring.",
+    results: {
+      authentication: "100%",
+      phishingAttempts: "-90%",
+      compliance: "Full compliance",
+      timeframe: "1 week"
+    },
+    metrics: [
+      { label: "Email Authentication", value: "100%" },
+      { label: "Phishing Attempts Blocked", value: "-90%" },
+      { label: "Compliance Status", value: "Full" },
+      { label: "Client Trust Score", value: "+40%" }
+    ],
+    technologies: ["SPF", "DKIM", "DMARC", "DNS Management"],
+    testimonial: "RKS Infra's authentication setup eliminated our email security concerns. We're now fully compliant and our clients trust our communications.",
+    year: 2023
+  },
+  {
+    id: 5,
+    title: "Manufacturing Network Security Overhaul",
+    client: "Manufacturing Company",
+    industry: "Manufacturing",
+    service: "Network Security",
+    challenge: "Outdated network security, frequent downtime, and inability to support remote operations.",
+    solution: "Complete network security overhaul with firewall, VPN, and infrastructure management.",
+    results: {
+      uptime: "99.9%",
+      securityIncidents: "Zero",
+      remoteAccess: "100% enabled",
+      timeframe: "3 weeks"
+    },
+    metrics: [
+      { label: "Network Uptime", value: "99.9%" },
+      { label: "Security Incidents", value: "Zero" },
+      { label: "Remote Access", value: "100% enabled" },
+      { label: "Downtime Reduction", value: "-95%" }
+    ],
+    technologies: ["Sophos Firewall", "VPN", "Network Monitoring", "Infrastructure Management"],
+    testimonial: "RKS Infra transformed our network infrastructure. We now have enterprise-grade security and can operate remotely without concerns.",
+    year: 2023
+  },
+  {
+    id: 6,
+    title: "Marketing Agency Email Reputation Recovery",
+    client: "Digital Marketing Agency",
+    industry: "Marketing",
+    service: "Email Deliverability",
+    challenge: "Client email campaigns blocked due to poor sender reputation across multiple domains.",
+    solution: "Multi-domain reputation recovery, authentication setup, and sending practice optimization.",
+    results: {
+      inboxRate: "96%",
+      clientRetention: "+85%",
+      campaignSuccess: "+70%",
+      timeframe: "4 weeks"
+    },
+    metrics: [
+      { label: "Average Inbox Rate", value: "96%" },
+      { label: "Client Retention", value: "+85%" },
+      { label: "Campaign Success Rate", value: "+70%" },
+      { label: "Domain Reputation", value: "Excellent" }
+    ],
+    technologies: ["Reputation Management", "SPF/DKIM/DMARC", "List Hygiene", "IP Warming"],
+    testimonial: "RKS Infra saved our agency. They recovered our sender reputation and our client campaigns now perform exceptionally well.",
+    year: 2024
+  }
+];
+

@@ -4,6 +4,7 @@ import { Mail, Shield, Server, Globe, ArrowRight, Clock } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { solutionsAPI } from '../services/api';
+import { staticSolutions } from '../data/staticData';
 
 const SolutionsPage = () => {
   const [solutions, setSolutions] = useState([]);
@@ -22,7 +23,11 @@ const SolutionsPage = () => {
         const cats = ['All', ...new Set(response.data.map(s => s.category))];
         setCategories(cats);
       } catch (error) {
-        console.error('Error fetching solutions:', error);
+        console.error('Error fetching solutions, using static data:', error);
+        // Use static data as fallback when API is unavailable
+        setSolutions(staticSolutions);
+        const cats = ['All', ...new Set(staticSolutions.map(s => s.category))];
+        setCategories(cats);
       } finally {
         setLoading(false);
       }
@@ -32,8 +37,8 @@ const SolutionsPage = () => {
   }, []);
 
   const filteredSolutions = selectedCategory === 'All' 
-    ? solutions 
-    : solutions.filter(s => s.category === selectedCategory);
+    ? displaySolutions 
+    : displaySolutions.filter(s => s.category === selectedCategory);
 
   const iconMap = {
     'Email Deliverability': Mail,
@@ -51,6 +56,8 @@ const SolutionsPage = () => {
       </div>
     );
   }
+
+  const displaySolutions = solutions.length > 0 ? solutions : staticSolutions;
 
   return (
     <div className="min-h-screen bg-deep-blue text-white">

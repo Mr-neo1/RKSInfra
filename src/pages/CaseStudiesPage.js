@@ -4,6 +4,7 @@ import { Filter, Shield, Mail, Server, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { caseStudiesAPI } from '../services/api';
+import { staticCaseStudies } from '../data/staticData';
 
 const CaseStudiesPage = () => {
   const [caseStudies, setCaseStudies] = useState([]);
@@ -26,7 +27,13 @@ const CaseStudiesPage = () => {
         setIndustries(inds);
         setServices(svcs);
       } catch (error) {
-        console.error('Error fetching case studies:', error);
+        console.error('Error fetching case studies, using static data:', error);
+        // Use static data as fallback when API is unavailable
+        setCaseStudies(staticCaseStudies);
+        const inds = ['All', ...new Set(staticCaseStudies.map(cs => cs.industry))];
+        const svcs = ['All', ...new Set(staticCaseStudies.map(cs => cs.service))];
+        setIndustries(inds);
+        setServices(svcs);
       } finally {
         setLoading(false);
       }

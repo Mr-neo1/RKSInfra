@@ -4,6 +4,7 @@ import { Shield, Mail, Server, Globe, ShieldCheck, Monitor, Users, ArrowRight } 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { servicesAPI } from '../services/api';
+import { staticServices } from '../data/staticData';
 
 const iconMap = {
   Shield,
@@ -27,8 +28,10 @@ const ServicesPage = () => {
         setServices(response.data || []);
         setError(null);
       } catch (error) {
-        console.error('Error fetching services:', error);
-        setError('Failed to load services. Please try again later.');
+        console.error('Error fetching services, using static data:', error);
+        // Use static data as fallback when API is unavailable
+        setServices(staticServices);
+        setError(null);
       } finally {
         setLoading(false);
       }
