@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle, Shield } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { contactAPI, servicesAPI } from '../services/api';
+import { servicesAPI } from '../services/api';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
