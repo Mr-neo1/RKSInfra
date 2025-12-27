@@ -45,18 +45,37 @@ const ContactPage = () => {
     setSuccess(false);
 
     try {
-      await contactAPI.submitContact(formData);
-      setSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        serviceInterest: '',
-        subject: '',
-        message: '',
+      const formData = new FormData();
+      formData.append('access_key', 'b6304684-ad60-44ba-9601-af8df41406eb');
+      formData.append('name', formData.name);
+      formData.append('email', formData.email);
+      formData.append('phone', formData.phone || '');
+      formData.append('serviceInterest', formData.serviceInterest || '');
+      formData.append('subject', formData.subject || 'General Inquiry');
+      formData.append('message', formData.message);
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
       });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSuccess(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          serviceInterest: '',
+          subject: '',
+          message: '',
+        });
+      } else {
+        setError(data.message || 'Failed to submit form');
+      }
     } catch (err) {
-      setError(err.message || 'Failed to submit form. Please try again.');
+      setError('Failed to submit form. Please try again.');
     } finally {
       setLoading(false);
     }
