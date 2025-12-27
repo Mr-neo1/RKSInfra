@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/.netlify/functions' 
+  ? process.env.REACT_APP_API_URL || '/api'
   : process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
