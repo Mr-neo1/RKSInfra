@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FAQ from '../components/FAQ';
 import { homeAPI, servicesAPI } from '../services/api';
+import { staticHomeData, staticServices } from '../data/staticData';
 
 const iconMap = {
   Shield,
@@ -34,7 +35,10 @@ const HomePage = () => {
         setHomeData(homeResponse.data);
         setServices(servicesResponse.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data, using static data:', error);
+        // Use static data as fallback when API is unavailable
+        setHomeData(staticHomeData);
+        setServices(staticServices);
       } finally {
         setLoading(false);
       }
@@ -43,13 +47,17 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  if (loading || !homeData) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-deep-blue text-white flex items-center justify-center">
         <div className="text-cyan-highlight text-xl">Loading...</div>
       </div>
     );
   }
+
+  // Use static data as fallback if homeData is still null
+  const displayData = homeData || staticHomeData;
+  const displayServices = services.length > 0 ? services : staticServices;
 
   return (
     <div className="min-h-screen bg-deep-blue text-white">
@@ -67,15 +75,15 @@ const HomePage = () => {
           <div className="grid md:grid-cols-[55%_45%] gap-12 items-center">
             <div className="space-y-8">
               <div className="inline-block px-4 py-2 bg-security-blue/10 border border-security-blue/20 rounded-full text-cyan-highlight text-sm font-medium">
-                {homeData.hero.badge}
+                {displayData.hero.badge}
               </div>
               
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                {homeData.hero.title}
+                {displayData.hero.title}
               </h1>
               
               <p className="text-xl text-light-gray leading-relaxed">
-                {homeData.hero.subtitle}
+                {displayData.hero.subtitle}
               </p>
               
               <div className="flex flex-wrap gap-4">
@@ -95,7 +103,7 @@ const HomePage = () => {
               </div>
               
               <div className="flex flex-wrap gap-6 pt-4">
-                {homeData.hero.stats.map((stat, i) => (
+                {displayData.hero.stats.map((stat, i) => (
                   <div key={i} className="flex items-center space-x-2 text-trust-green">
                     <CheckCircle className="w-5 h-5" />
                     <span className="text-light-gray">{stat}</span>
@@ -140,7 +148,7 @@ const HomePage = () => {
       <section className="py-12 px-4 sm:px-6 lg:px-8 bg-slate-900/50 border-y border-slate-800">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {homeData.trustIndicators.map((indicator, i) => (
+            {displayData.trustIndicators.map((indicator, i) => (
               <div key={i} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-security-blue to-cyan-highlight bg-clip-text text-transparent mb-2">
                   {indicator.number}
@@ -165,7 +173,7 @@ const HomePage = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => {
+            {displayServices.map((service) => {
               const Icon = iconMap[service.icon] || Shield;
               return (
                 <div
@@ -243,12 +251,12 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {homeData.whyChooseUs.title}
+              {displayData.whyChooseUs.title}
             </h2>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {homeData.whyChooseUs.differentiators.map((item, i) => (
+            {displayData.whyChooseUs.differentiators.map((item, i) => (
               <div key={i} className="p-6 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-cyan-highlight/50 transition-all duration-300">
                 <h3 className="text-xl font-bold mb-3 text-cyan-highlight">{item.title}</h3>
                 <p className="text-medium-gray">{item.description}</p>
@@ -263,16 +271,16 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {homeData.process.title}
+              {displayData.process.title}
             </h2>
           </div>
           
           <div className="grid md:grid-cols-4 gap-8">
-            {homeData.process.steps.map((step, i) => {
+            {displayData.process.steps.map((step, i) => {
               const StepIcon = step.icon === 'Search' ? Search : step.icon === 'FileText' ? FileText : step.icon === 'Settings' ? Settings : BarChart;
               return (
                 <div key={i} className="relative">
-                  {i < homeData.process.steps.length - 1 && (
+                  {i < displayData.process.steps.length - 1 && (
                     <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-security-blue to-cyan-highlight transform translate-x-4"></div>
                   )}
                   <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl border border-slate-700 text-center">
@@ -300,7 +308,7 @@ const HomePage = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {homeData.successMetrics.map((metric, i) => (
+            {displayData.successMetrics.map((metric, i) => (
               <div key={i} className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl border border-slate-700">
                 <h3 className="text-2xl font-bold mb-6">{metric.title}</h3>
                 <div className="space-y-4">
@@ -333,7 +341,7 @@ const HomePage = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {homeData.technologies.categories.map((category, i) => (
+            {displayData.technologies.categories.map((category, i) => (
               <div key={i} className="bg-slate-800/50 p-6 rounded-xl border border-slate-700">
                 <h3 className="text-xl font-bold mb-4 text-cyan-highlight">{category.category}</h3>
                 <div className="flex flex-wrap gap-2">
@@ -359,7 +367,7 @@ const HomePage = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {homeData.industries.map((industry, i) => (
+            {displayData.industries.map((industry, i) => (
               <div key={i} className="p-6 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-cyan-highlight/50 transition-all duration-300">
                 <h3 className="text-xl font-bold mb-3">{industry.name}</h3>
                 <p className="text-medium-gray">{industry.description}</p>
@@ -374,12 +382,12 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {homeData.supportModels.title}
+              {displayData.supportModels.title}
             </h2>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {homeData.supportModels.models.map((model, i) => (
+            {displayData.supportModels.models.map((model, i) => (
               <div key={i} className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl border border-slate-700">
                 <h3 className="text-2xl font-bold mb-4 text-cyan-highlight">{model.type}</h3>
                 <p className="text-light-gray mb-4">{model.description}</p>
@@ -407,17 +415,17 @@ const HomePage = () => {
       </section>
 
       {/* 11. FAQ SECTION */}
-      <FAQ faqs={homeData.faq} />
+      <FAQ faqs={displayData.faq} />
 
       {/* 12. CONTACT/CTA SECTION */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="bg-gradient-to-br from-security-blue/10 to-cyan-highlight/10 border border-security-blue/20 rounded-3xl p-12 text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              {homeData.cta.title}
+              {displayData.cta.title}
             </h2>
             <p className="text-xl text-light-gray mb-8 max-w-2xl mx-auto">
-              {homeData.cta.description}
+              {displayData.cta.description}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
