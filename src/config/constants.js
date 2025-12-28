@@ -88,7 +88,7 @@ export const PERFORMANCE = {
 };
 
 // Export all as a single object for convenience
-export default {
+const configDefault = {
   SITE_CONFIG,
   API_CONFIG,
   FORM_CONFIG,
@@ -98,4 +98,6 @@ export default {
   NAVIGATION,
   PERFORMANCE,
 };
+
+export default configDefault;
 

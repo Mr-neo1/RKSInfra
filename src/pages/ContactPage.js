@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { servicesAPI } from '../services/api';
 import { staticServices } from '../data/staticData';
+import { SITE_CONFIG } from '../config/constants';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
