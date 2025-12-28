@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Filter, Shield, Mail, Server, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Loading from '../components/Loading';
 import { caseStudiesAPI } from '../services/api';
 import { staticCaseStudies } from '../data/staticData';
 
@@ -59,7 +60,7 @@ const CaseStudiesPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-deep-blue text-white flex items-center justify-center">
-        <div className="text-cyan-highlight text-xl">Loading...</div>
+        <Loading fullScreen />
       </div>
     );
   }

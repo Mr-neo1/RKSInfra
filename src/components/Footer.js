@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shield } from 'lucide-react';
+import { SOCIAL_LINKS } from '../config/constants';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -30,9 +31,9 @@ const Footer = () => {
     {
       title: 'Connect',
       items: [
-        { name: 'Email', path: 'mailto:contact@rksinfra.com', external: true },
-        { name: 'LinkedIn', path: 'https://linkedin.com', external: true },
-        { name: 'WhatsApp Business', path: 'https://wa.me', external: true },
+        { name: 'Email', path: SOCIAL_LINKS.email, external: true },
+        { name: 'LinkedIn', path: SOCIAL_LINKS.linkedin, external: true },
+        { name: 'WhatsApp Business', path: SOCIAL_LINKS.whatsapp, external: true },
       ],
     },
   ];

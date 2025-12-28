@@ -10,7 +10,7 @@ export const SITE_CONFIG = {
   name: 'RKS Infra',
   tagline: 'Secure Your Email Infrastructure & Network',
   email: 'contact@rksinfra.com',
-  phone: '+91 [Your Number]',
+  phone: '+91 7065219519',
   location: 'Ludhiana, Punjab, India',
   businessHours: '24/7 Support Available',
   responseTime: 'Within 4 hours',
@@ -50,7 +50,7 @@ export const FEATURES = {
 // Social Media Links
 export const SOCIAL_LINKS = {
   linkedin: 'https://linkedin.com/company/rksinfra',
-  whatsapp: 'https://wa.me/911234567890', // Update with your WhatsApp number
+  whatsapp: 'https://wa.me/917065219519', // WhatsApp Business
   email: 'mailto:contact@rksinfra.com',
 };
 

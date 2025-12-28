@@ -125,8 +125,8 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1 text-light-gray">Phone</h3>
-                    <a href="tel:+911234567890" className="text-medium-gray hover:text-cyan-highlight transition-colors">
-                      +91 [Your Number]
+                    <a href={`tel:${SITE_CONFIG.phone.replace(/\s/g, '')}`} className="text-medium-gray hover:text-cyan-highlight transition-colors">
+                      {SITE_CONFIG.phone}
                     </a>
                   </div>
                 </div>
