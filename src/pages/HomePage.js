@@ -7,6 +7,7 @@ import {
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FAQ from '../components/FAQ';
+import Loading from '../components/Loading';
 import { homeAPI, servicesAPI } from '../services/api';
 import { staticHomeData, staticServices } from '../data/staticData';
 
@@ -50,7 +51,7 @@ const HomePage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-deep-blue text-white flex items-center justify-center">
-        <div className="text-cyan-highlight text-xl">Loading...</div>
+        <Loading fullScreen />
       </div>
     );
   }

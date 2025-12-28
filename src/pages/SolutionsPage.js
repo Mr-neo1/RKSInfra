@@ -36,6 +36,7 @@ const SolutionsPage = () => {
     fetchSolutions();
   }, []);
 
+  const displaySolutions = solutions.length > 0 ? solutions : staticSolutions;
   const filteredSolutions = selectedCategory === 'All' 
     ? displaySolutions 
     : displaySolutions.filter(s => s.category === selectedCategory);
@@ -56,8 +57,6 @@ const SolutionsPage = () => {
       </div>
     );
   }
-
-  const displaySolutions = solutions.length > 0 ? solutions : staticSolutions;
 
   return (
     <div className="min-h-screen bg-deep-blue text-white">

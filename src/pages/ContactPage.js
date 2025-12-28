@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin, Send, CheckCircle, Shield } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { servicesAPI } from '../services/api';
+import { staticServices } from '../data/staticData';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,8 @@ const ContactPage = () => {
         const response = await servicesAPI.getAllServices();
         setServices(response.data);
       } catch (error) {
-        console.error('Error fetching services:', error);
+        console.error('Error fetching services, using static data:', error);
+        setServices(staticServices);
       }
     };
     fetchServices();
@@ -45,18 +47,18 @@ const ContactPage = () => {
     setSuccess(false);
 
     try {
-      const formData = new FormData();
-      formData.append('access_key', 'b6304684-ad60-44ba-9601-af8df41406eb');
-      formData.append('name', formData.name);
-      formData.append('email', formData.email);
-      formData.append('phone', formData.phone || '');
-      formData.append('serviceInterest', formData.serviceInterest || '');
-      formData.append('subject', formData.subject || 'General Inquiry');
-      formData.append('message', formData.message);
+      const submitFormData = new FormData();
+      submitFormData.append('access_key', 'b6304684-ad60-44ba-9601-af8df41406eb');
+      submitFormData.append('name', formData.name);
+      submitFormData.append('email', formData.email);
+      submitFormData.append('phone', formData.phone || '');
+      submitFormData.append('serviceInterest', formData.serviceInterest || '');
+      submitFormData.append('subject', formData.subject || 'General Inquiry');
+      submitFormData.append('message', formData.message);
 
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: formData
+        body: submitFormData
       });
 
       const data = await response.json();
