@@ -8,8 +8,10 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FAQ from '../components/FAQ';
 import Loading from '../components/Loading';
+import SEO from '../components/SEO';
 import { homeAPI, servicesAPI } from '../services/api';
 import { staticHomeData, staticServices } from '../data/staticData';
+import { SEO_CONFIG } from '../config/constants';
 
 const iconMap = {
   Shield,
@@ -60,9 +62,46 @@ const HomePage = () => {
   const displayData = homeData || staticHomeData;
   const displayServices = services.length > 0 ? services : staticServices;
 
+  // Structured data for homepage
+  const homepageStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "RKS Infra",
+    "url": SEO_CONFIG.siteUrl,
+    "description": SEO_CONFIG.defaultDescription,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${SEO_CONFIG.siteUrl}/search?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const serviceStructuredData = displayServices.map(service => ({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": service.title,
+    "description": service.description,
+    "provider": {
+      "@type": "Organization",
+      "name": "RKS Infra"
+    },
+    "areaServed": "Worldwide",
+    "serviceType": service.title
+  }));
+
   return (
-    <div className="min-h-screen bg-deep-blue text-white">
-      <Navbar />
+    <>
+      <SEO
+        title="Home"
+        description="Leading IT Solutions Provider specializing in email security, network infrastructure, and email deliverability. Transform your business with enterprise-grade security solutions."
+        keywords="email security, network security, IT infrastructure, email deliverability, SPF DKIM DMARC, Sophos firewall, IT consulting, cybersecurity"
+        structuredData={[homepageStructuredData, ...serviceStructuredData]}
+      />
+      <div className="min-h-screen bg-deep-blue text-white">
+        <Navbar />
 
       {/* 1. HERO SECTION */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -448,7 +487,8 @@ const HomePage = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

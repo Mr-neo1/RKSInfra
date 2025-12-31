@@ -4,7 +4,7 @@
 
 ### Why Vercel?
 - ⚡ **Ultra Fast** - Global CDN, edge caching
-- 🆓 **Free Tier** - Perfect for your needs
+- 🆓b37bdc24704f3068.vercel-dns-017.com. **Free Tier** - Perfect for your needs
 - 🔄 **Auto Deploy** - Deploy on every git push
 - 🔒 **HTTPS** - Automatic SSL certificates
 - 📊 **Analytics** - Built-in performance monitoring

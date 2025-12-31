@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Mail, Shield, Server, Globe, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import { portfolioAPI } from '../services/api';
 import { staticPortfolio } from '../data/staticData';
 
@@ -45,9 +46,29 @@ const PortfolioPage = () => {
 
   const displayPortfolio = portfolioItems.length > 0 ? portfolioItems : staticPortfolio;
 
+  // Structured data for portfolio
+  const portfolioStructuredData = displayPortfolio.map(item => ({
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": item.title,
+    "description": item.description,
+    "creator": {
+      "@type": "Organization",
+      "name": "RKS Infra"
+    },
+    "category": item.category
+  }));
+
   return (
-    <div className="min-h-screen bg-deep-blue text-white">
-      <Navbar />
+    <>
+      <SEO
+        title="Our Portfolio"
+        description="Explore our successful projects in email security, network infrastructure, and IT solutions. See how we've helped businesses secure their digital infrastructure."
+        keywords="RKS Infra portfolio, email security projects, network security case studies, IT infrastructure projects, successful implementations"
+        structuredData={portfolioStructuredData}
+      />
+      <div className="min-h-screen bg-deep-blue text-white">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
@@ -129,7 +150,8 @@ const PortfolioPage = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

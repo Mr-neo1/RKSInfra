@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle, Shield } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import { servicesAPI } from '../services/api';
 import { staticServices } from '../data/staticData';
-import { SITE_CONFIG } from '../config/constants';
+import { SITE_CONFIG, SEO_CONFIG } from '../config/constants';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -84,9 +85,43 @@ const ContactPage = () => {
     }
   };
 
+  // Structured data for contact page
+  const contactStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact RKS Infra",
+    "description": "Get in touch with RKS Infra for email security and network infrastructure solutions",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "RKS Infra",
+      "url": SEO_CONFIG.siteUrl,
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-7065219519",
+        "contactType": "Customer Service",
+        "email": "contact@rksinfra.com",
+        "areaServed": "Worldwide",
+        "availableLanguage": "English"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ludhiana",
+        "addressRegion": "Punjab",
+        "addressCountry": "IN"
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-deep-blue text-white">
-      <Navbar />
+    <>
+      <SEO
+        title="Contact Us"
+        description="Get in touch with RKS Infra for expert email security and network infrastructure solutions. Free consultations available. Response within 4 hours."
+        keywords="contact RKS Infra, email security consultation, network security support, IT infrastructure help, get quote"
+        structuredData={contactStructuredData}
+      />
+      <div className="min-h-screen bg-deep-blue text-white">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
@@ -309,7 +344,8 @@ const ContactPage = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

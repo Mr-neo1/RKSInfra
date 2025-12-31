@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Mail, Shield, Server, Globe, ArrowRight, Clock } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import { solutionsAPI } from '../services/api';
 import { staticSolutions } from '../data/staticData';
 
@@ -58,9 +59,30 @@ const SolutionsPage = () => {
     );
   }
 
+  // Structured data for solutions
+  const solutionsStructuredData = displaySolutions.map(solution => ({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": solution.title,
+    "description": solution.description,
+    "step": solution.steps?.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": step.title || step,
+      "text": step.description || step
+    }))
+  }));
+
   return (
-    <div className="min-h-screen bg-deep-blue text-white">
-      <Navbar />
+    <>
+      <SEO
+        title="Solutions"
+        description="Step-by-step solutions for email security and network infrastructure challenges. Expert guidance on SPF, DKIM, DMARC, firewall configuration, and more."
+        keywords="email security solutions, network security solutions, SPF DKIM DMARC guide, firewall setup guide, IT infrastructure solutions"
+        structuredData={solutionsStructuredData}
+      />
+      <div className="min-h-screen bg-deep-blue text-white">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
@@ -244,7 +266,8 @@ const SolutionsPage = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

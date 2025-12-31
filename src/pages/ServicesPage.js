@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { Shield, Mail, Server, Globe, ShieldCheck, Monitor, Users, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import { servicesAPI } from '../services/api';
 import { staticServices } from '../data/staticData';
+import { SEO_CONFIG } from '../config/constants';
 
 const iconMap = {
   Shield,
@@ -68,9 +70,32 @@ const ServicesPage = () => {
     );
   }
 
+  // Structured data for services page
+  const servicesStructuredData = services.map(service => ({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": service.title,
+    "description": service.description,
+    "provider": {
+      "@type": "Organization",
+      "name": "RKS Infra",
+      "url": SEO_CONFIG.siteUrl
+    },
+    "areaServed": "Worldwide",
+    "serviceType": service.title,
+    "url": `${SEO_CONFIG.siteUrl}/services/${service.id}`
+  }));
+
   return (
-    <div className="min-h-screen bg-deep-blue text-white">
-      <Navbar />
+    <>
+      <SEO
+        title="Our Services"
+        description="Comprehensive email security and network infrastructure solutions. From SPF/DKIM/DMARC configuration to Sophos firewall setup, we protect your business infrastructure."
+        keywords="email security services, network security services, email deliverability, SPF DKIM DMARC setup, firewall configuration, IT infrastructure services"
+        structuredData={servicesStructuredData}
+      />
+      <div className="min-h-screen bg-deep-blue text-white">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
@@ -142,7 +167,8 @@ const ServicesPage = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

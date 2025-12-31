@@ -4,6 +4,7 @@ import { Filter, Shield, Mail, Server, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Loading from '../components/Loading';
+import SEO from '../components/SEO';
 import { caseStudiesAPI } from '../services/api';
 import { staticCaseStudies } from '../data/staticData';
 
@@ -57,6 +58,20 @@ const CaseStudiesPage = () => {
     'Server Management': Server,
   };
 
+  // Structured data for case studies
+  const caseStudiesStructuredData = caseStudies.map(cs => ({
+    "@context": "https://schema.org",
+    "@type": "CaseStudy",
+    "name": cs.title,
+    "description": cs.description,
+    "about": {
+      "@type": "Thing",
+      "name": cs.service
+    },
+    "industry": cs.industry,
+    "result": cs.results
+  }));
+
   if (loading) {
     return (
       <div className="min-h-screen bg-deep-blue text-white flex items-center justify-center">
@@ -66,8 +81,15 @@ const CaseStudiesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-deep-blue text-white">
-      <Navbar />
+    <>
+      <SEO
+        title="Case Studies"
+        description="Real success stories from businesses we've helped secure their email and network infrastructure. See measurable results and proven outcomes."
+        keywords="RKS Infra case studies, email security success stories, network security case studies, IT infrastructure case studies, client testimonials"
+        structuredData={caseStudiesStructuredData}
+      />
+      <div className="min-h-screen bg-deep-blue text-white">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
@@ -269,7 +291,8 @@ const CaseStudiesPage = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

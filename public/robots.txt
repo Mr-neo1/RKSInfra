@@ -1,0 +1,21 @@
+# robots.txt for RKS Infra
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas (if any)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+
+# Allow CSS and JS files for proper rendering
+Allow: /static/css/
+Allow: /static/js/
+
+# Sitemap location
+Sitemap: https://rksinfra.com/sitemap.xml
+
+# Crawl-delay (optional, adjust as needed)
+Crawl-delay: 1
+

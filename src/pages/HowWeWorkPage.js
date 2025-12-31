@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Search, FileText, Settings, BarChart, CheckCircle, Clock, ArrowRight, Users, Shield } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import { processAPI } from '../services/api';
 import { staticProcessData } from '../data/staticData';
 
@@ -45,9 +46,30 @@ const HowWeWorkPage = () => {
     BarChart,
   };
 
+  // Structured data for process/workflow
+  const processStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How We Work - RKS Infra Process",
+    "description": displayProcessData.overview.description,
+    "step": displayProcessData.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": step.title,
+      "text": step.description
+    }))
+  };
+
   return (
-    <div className="min-h-screen bg-deep-blue text-white">
-      <Navbar />
+    <>
+      <SEO
+        title="How We Work"
+        description="Learn about our proven 4-step process for implementing email security and network infrastructure solutions. From assessment to ongoing support."
+        keywords="RKS Infra process, email security implementation process, network security workflow, IT infrastructure setup process"
+        structuredData={processStructuredData}
+      />
+      <div className="min-h-screen bg-deep-blue text-white">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
@@ -306,7 +328,8 @@ const HowWeWorkPage = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

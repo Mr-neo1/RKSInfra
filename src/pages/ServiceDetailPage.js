@@ -3,8 +3,10 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Clock, Users, Shield, Mail, Server, Globe, ShieldCheck, Monitor, Users as UsersIcon, ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import { servicesAPI } from '../services/api';
 import { staticServices } from '../data/staticData';
+import { SEO_CONFIG } from '../config/constants';
 
 const iconMap = {
   Shield,
@@ -69,9 +71,36 @@ const ServiceDetailPage = () => {
   const Icon = iconMap[service.icon] || Shield;
   const otherServices = allServices.filter(s => s.id !== service.id).slice(0, 3);
 
+  // Structured data for service detail page
+  const serviceStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": service.title,
+    "description": service.description,
+    "provider": {
+      "@type": "Organization",
+      "name": "RKS Infra",
+      "url": SEO_CONFIG.siteUrl
+    },
+    "areaServed": "Worldwide",
+    "serviceType": service.title,
+    "url": `${SEO_CONFIG.siteUrl}/services/${service.id}`,
+    "offers": {
+      "@type": "Offer",
+      "description": service.keyBenefit
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-deep-blue text-white">
-      <Navbar />
+    <>
+      <SEO
+        title={service.title}
+        description={service.description}
+        keywords={`${service.title}, email security, network security, IT services, ${service.keyBenefit}`}
+        structuredData={serviceStructuredData}
+      />
+      <div className="min-h-screen bg-deep-blue text-white">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -318,7 +347,8 @@ const ServiceDetailPage = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 
