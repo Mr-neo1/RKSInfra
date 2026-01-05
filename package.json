@@ -9,13 +9,11 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/pre-build-fix.js",
-    "build": "node scripts/pre-build-fix.js && next build",
-    "build:react": "node scripts/pre-build-fix.js && react-scripts build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "cleanup": "node scripts/cleanup-old-files.js",
-    "fix-old-files": "node scripts/pre-build-fix.js"
+    "cleanup": "node scripts/cleanup-old-files.js"
   },
   "dependencies": {
     "next": "^15.0.0",
