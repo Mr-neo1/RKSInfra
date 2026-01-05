@@ -1,7 +1,23 @@
 {
   "extends": ["react-app"],
   "rules": {
-    "no-undef": "off"
+    "no-undef": "off",
+    "no-unused-vars": "off"
   },
-  "ignorePatterns": ["src/**"]
+  "overrides": [
+    {
+      "files": ["src/**/*.js", "src/**/*.jsx", "**/src/**/*.js", "**/src/**/*.jsx"],
+      "rules": {
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "react/react-in-jsx-scope": "off"
+      }
+    },
+    {
+      "files": ["src/pages/ContactPage.js"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
 }

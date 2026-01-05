@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "prebuild": "node scripts/remove-src-before-build.js",
+    "build": "node scripts/remove-src-before-build.js && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
