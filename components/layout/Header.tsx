@@ -61,10 +61,10 @@ export default function Header() {
               <div
                 key={item.path}
                 className="relative"
-                onMouseEnter={() => item.hasDropdown && setIsServicesOpen(true)}
-                onMouseLeave={() => item.hasDropdown && setIsServicesOpen(false)}
+                onMouseEnter={() => 'hasDropdown' in item && item.hasDropdown && setIsServicesOpen(true)}
+                onMouseLeave={() => 'hasDropdown' in item && item.hasDropdown && setIsServicesOpen(false)}
               >
-                {item.hasDropdown ? (
+                {'hasDropdown' in item && item.hasDropdown ? (
                   <>
                     <button className={`transition-colors duration-300 ${
                       isActive(item.path) ? 'text-security-blue' : 'text-light-gray hover:text-cyan-highlight'
@@ -121,7 +121,7 @@ export default function Header() {
           <div className="px-4 py-4 space-y-3">
             {NAVIGATION.main.map((item) => (
               <div key={item.path}>
-                {item.hasDropdown ? (
+                {'hasDropdown' in item && item.hasDropdown ? (
                   <div>
                     <button
                       onClick={() => setIsServicesOpen(!isServicesOpen)}
