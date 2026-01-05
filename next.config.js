@@ -10,6 +10,9 @@ const nextConfig = {
   // Fix lockfile warning
   outputFileTracingRoot: path.join(__dirname),
   
+  // Exclude old src directory - Next.js only looks in app/ and pages/ directories
+  // The src/ directory from old CRA setup will be ignored automatically
+  
   // Images
   images: {
     formats: ['image/avif', 'image/webp'],

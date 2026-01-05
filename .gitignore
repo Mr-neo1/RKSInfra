@@ -37,3 +37,10 @@ next-env.d.ts
 
 # old pages router (using app router now)
 /src/
+src/
+
+# Build artifacts
+.next/
+out/
+dist/
+build/

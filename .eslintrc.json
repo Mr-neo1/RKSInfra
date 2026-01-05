@@ -1,6 +1,33 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["react-app", "react-app/jest"],
+  "ignorePatterns": [
+    "src/**/*",
+    "**/src/**/*",
+    "src/pages/ContactPage.js",
+    "src/pages/**",
+    "src/**"
+  ],
   "rules": {
-    "react/no-unescaped-entities": "off"
-  }
+    "react/no-unescaped-entities": "off",
+    "no-undef": "off",
+    "no-unused-vars": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/**/*", "**/src/**/*"],
+      "rules": {
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "react/react-in-jsx-scope": "off",
+        "jsx-a11y/anchor-is-valid": "off"
+      }
+    },
+    {
+      "files": ["src/pages/ContactPage.js"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
 }
+

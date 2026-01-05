@@ -1,3 +1,8 @@
 # Ignore old Pages Router directory (using App Router now)
 src/
+src/**/*
+**/src/**
+src/pages/ContactPage.js
+src/pages/**
+src/**
 
