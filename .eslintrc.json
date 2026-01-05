@@ -2,5 +2,6 @@
   "extends": ["react-app"],
   "rules": {
     "no-undef": "off"
-  }
+  },
+  "ignorePatterns": ["src/**"]
 }

@@ -8,12 +8,10 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/pre-build-fix.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit",
-    "cleanup": "node scripts/cleanup-old-files.js"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "next": "^15.0.0",
