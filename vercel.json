@@ -2,12 +2,17 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/services/index.html"
+      "has": [
+        {
+          "type": "host",
+          "value": "services.rksinfra.com"
+        }
+      ],
+      "destination": "/services"
     }
-  ],
-  "domains": {
-    "services.rksinfra.com": {
-      "dest": "/services/index.html"
-    }
-  }
+  ]
 }
+
+
+
+
