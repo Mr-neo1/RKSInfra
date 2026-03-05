@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/services/index.html"
+    }
+  ],
+  "domains": {
+    "services.rksinfra.com": {
+      "dest": "/services/index.html"
+    }
+  }
+}
