@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RKSInfra — Digital Growth</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Noto+Sans+JP&family=Noto+Sans+Arabic&family=Noto+Sans+KR&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --void:#000509;
+  --electric:#00e5ff;
+  --fire:#ff4d00;
+  --lime:#aaff00;
+  --white:#f0faff;
+  --dim:#3a6a80;
+}
+html,body{
+  width:100%;min-height:100vh;
+  background:var(--void);
+  font-family:'Syne',sans-serif;
+  color:var(--white);
+  overflow-x:hidden;
+  cursor:none;
+}
+#cursor{
+  position:fixed;width:14px;height:14px;
+  background:var(--electric);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  mix-blend-mode:difference;
+  transition:transform .15s ease;
+  box-shadow:0 0 18px var(--electric),0 0 40px var(--electric);
+}
+#cursor-trail{
+  position:fixed;width:36px;height:36px;
+  border:1.5px solid rgba(0,229,255,.4);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transition:left .08s ease,top .08s ease;
+}
+#bg{position:fixed;inset:0;z-index:0;}
+.scene{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:40px 16px;
+}
+
+/* ── LANG SWITCHER ── */
+.lang-switcher{
+  position:fixed;top:18px;right:18px;z-index:100;
+  display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+}
+.lang-btn{
+  font-family:'Space Mono',monospace;
+  font-size:.6rem;letter-spacing:.12em;
+  background:rgba(0,229,255,.08);
+  border:1px solid rgba(0,229,255,.2);
+  color:var(--electric);
+  border-radius:4px;padding:5px 10px;
+  cursor:pointer;
+  transition:all .2s;
+  white-space:nowrap;
+}
+.lang-btn:hover,.lang-btn.active{
+  background:rgba(0,229,255,.18);
+  border-color:var(--electric);
+  color:#fff;
+  box-shadow:0 0 14px rgba(0,229,255,.3);
+}
+.lang-toggle{
+  font-family:'Space Mono',monospace;
+  font-size:.6rem;letter-spacing:.15em;
+  background:rgba(255,77,0,.12);
+  border:1px solid rgba(255,77,0,.3);
+  color:var(--fire);
+  border-radius:4px;padding:6px 12px;
+  cursor:pointer;
+  transition:all .2s;
+}
+.lang-toggle:hover{background:rgba(255,77,0,.22);border-color:var(--fire);}
+.lang-list{
+  display:none;flex-direction:column;gap:4px;
+  max-height:320px;overflow-y:auto;
+  background:rgba(0,5,9,.95);
+  border:1px solid rgba(0,229,255,.15);
+  border-radius:6px;padding:8px;
+  scrollbar-width:thin;scrollbar-color:var(--electric) transparent;
+}
+.lang-list.open{display:flex;}
+.lang-flag{margin-right:5px;font-size:.9rem;}
+
+/* ── CARD ── */
+.card{
+  width:min(520px,98vw);
+  position:relative;
+}
+.card::before,.card::after{
+  content:'';position:absolute;
+  width:30px;height:30px;
+  border-color:var(--electric);border-style:solid;
+}
+.card::before{top:-2px;left:-2px;border-width:2px 0 0 2px;}
+.card::after{bottom:-2px;right:-2px;border-width:0 2px 2px 0;}
+.card-inner{
+  background:linear-gradient(135deg,rgba(0,229,255,.04) 0%,transparent 50%),rgba(2,12,22,.92);
+  border:1px solid rgba(0,229,255,.15);
+  border-radius:4px;overflow:hidden;
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 0 1px rgba(0,229,255,.06),0 40px 120px rgba(0,0,0,.9),inset 0 1px 0 rgba(0,229,255,.1);
+}
+.top-bar{
+  background:linear-gradient(90deg,rgba(0,229,255,.08),rgba(255,77,0,.06));
+  border-bottom:1px solid rgba(0,229,255,.12);
+  padding:10px 24px;
+  display:flex;justify-content:space-between;align-items:center;
+  opacity:0;animation:slideRight .6s .1s ease forwards;
+}
+.sys-id{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.25em;color:var(--electric);opacity:.7;}
+.status{display:flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:.55rem;color:rgba(170,255,0,.8);letter-spacing:.1em;}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime);animation:pulseDot 1.4s ease-in-out infinite;}
+.hero{padding:36px 28px 28px;position:relative;overflow:hidden;}
+.hero::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,255,.018) 2px,rgba(0,229,255,.018) 4px);
+  animation:scanMove 8s linear infinite;
+}
+.brand-row{display:flex;align-items:center;gap:14px;margin-bottom:28px;opacity:0;animation:fadeUp .7s .3s cubic-bezier(.22,1,.36,1) forwards;}
+.logo-hex{width:52px;height:52px;position:relative;flex-shrink:0;}
+.logo-hex svg{width:52px;height:52px;}
+.brand-info .name{
+  font-family:'Black Han Sans',sans-serif;font-size:1.7rem;letter-spacing:.12em;
+  background:linear-gradient(90deg,var(--white),var(--electric));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;position:relative;
+}
+.brand-info .name::before,.brand-info .name::after{
+  content:'RKSINFRA';position:absolute;top:0;left:0;width:100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;
+}
+.brand-info .name::before{background:linear-gradient(90deg,var(--fire),#ff9900);animation:glitch1 5s 2s infinite;}
+.brand-info .name::after{background:linear-gradient(90deg,var(--electric),var(--lime));animation:glitch2 5s 2s infinite;}
+.brand-info .sub{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;margin-top:3px;}
+
+/* ── LANG FLAG BADGE ── */
+.lang-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(0,229,255,.07);
+  border:1px solid rgba(0,229,255,.2);
+  border-radius:4px;padding:4px 10px;
+  font-family:'Space Mono',monospace;font-size:.55rem;
+  color:var(--electric);letter-spacing:.1em;
+  transition:all .4s ease;
+}
+.lang-badge .flag{font-size:.9rem;}
+
+.headline-block{margin-bottom:30px;opacity:0;animation:fadeUp .8s .5s cubic-bezier(.22,1,.36,1) forwards;}
+.hl-pre{
+  font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.3em;
+  color:var(--fire);text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.hl-pre::before{content:'';flex:0 0 24px;height:1px;background:var(--fire);}
+.hl-main{font-family:'Black Han Sans',sans-serif;font-size:clamp(2.2rem,7vw,3.4rem);line-height:.96;letter-spacing:-.01em;}
+.hl-main .w1{display:block;background:linear-gradient(90deg,var(--white) 40%,var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hl-main .w2{display:block;-webkit-text-stroke:1.5px var(--fire);color:transparent;}
+.hl-main .w3{display:block;background:linear-gradient(90deg,var(--lime),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hl-sub{margin-top:12px;font-size:.82rem;font-weight:400;color:rgba(240,250,255,.5);line-height:1.6;max-width:360px;min-height:40px;transition:opacity .3s;}
+
+.svcs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px;}
+.svc{
+  position:relative;overflow:hidden;
+  border:1px solid rgba(0,229,255,.1);border-radius:6px;
+  padding:16px 10px;text-align:center;
+  opacity:0;background:rgba(0,229,255,.03);
+  transition:border-color .3s,transform .3s;cursor:default;
+}
+.svc:nth-child(1){animation:popUp .6s .75s cubic-bezier(.34,1.56,.64,1) forwards;}
+.svc:nth-child(2){animation:popUp .6s .9s cubic-bezier(.34,1.56,.64,1) forwards;}
+.svc:nth-child(3){animation:popUp .6s 1.05s cubic-bezier(.34,1.56,.64,1) forwards;}
+.svc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(255,77,0,.08));opacity:0;transition:opacity .3s;}
+.svc:hover{border-color:var(--electric);transform:translateY(-5px);}
+.svc:hover::before{opacity:1;}
+.svc-num{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.2em;margin-bottom:8px;transition:color .3s;}
+.svc:hover .svc-num{color:var(--fire);}
+.svc-icon{font-size:1.6rem;margin-bottom:8px;display:block;}
+.svc-name{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--electric);margin-bottom:5px;transition:all .3s;}
+.svc-desc{font-size:.58rem;color:var(--dim);line-height:1.5;transition:all .3s;}
+
+.feat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:24px;opacity:0;animation:fadeUp .7s 1.2s ease forwards;}
+.feat{display:flex;align-items:center;gap:8px;font-size:.68rem;color:rgba(240,250,255,.6);}
+.feat-icon{width:22px;height:22px;flex-shrink:0;border:1px solid rgba(0,229,255,.2);border-radius:4px;display:grid;place-items:center;font-size:.65rem;background:rgba(0,229,255,.06);}
+
+.cta-block{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;opacity:0;animation:fadeUp .7s 1.4s ease forwards;}
+.btn{
+  border:none;cursor:pointer;
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  border-radius:4px;padding:14px 10px;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;
+}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .25s;}
+.btn:hover::after{opacity:1;}
+.btn:hover{transform:translateY(-2px);}
+.btn-call{background:linear-gradient(135deg,var(--fire),#ff8c00);color:#fff;box-shadow:0 6px 24px rgba(255,77,0,.4);}
+.btn-call:hover{box-shadow:0 12px 36px rgba(255,77,0,.6);}
+.btn-wa{background:transparent;color:var(--electric);border:1.5px solid var(--electric);box-shadow:0 0 20px rgba(0,229,255,.1),inset 0 0 20px rgba(0,229,255,.03);}
+.btn-wa:hover{box-shadow:0 0 32px rgba(0,229,255,.35),inset 0 0 32px rgba(0,229,255,.06);color:#fff;}
+
+.contact-row{display:grid;gap:7px;opacity:0;animation:fadeUp .6s 1.6s ease forwards;}
+.c-line{display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:.6rem;color:var(--dim);letter-spacing:.05em;}
+.c-label{color:var(--electric);opacity:.6;font-size:.55rem;width:36px;flex-shrink:0;letter-spacing:.15em;text-transform:uppercase;}
+.c-val{color:rgba(240,250,255,.75);}
+
+.ticker-wrap{border-top:1px solid rgba(0,229,255,.1);background:rgba(0,229,255,.04);overflow:hidden;padding:9px 0;opacity:0;animation:fadeIn .5s 1.8s ease forwards;}
+.ticker{display:flex;width:max-content;animation:ticker 20s linear infinite;}
+.t-item{white-space:nowrap;font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;padding:0 24px;color:rgba(0,229,255,.65);}
+.t-sep{color:var(--fire);padding:0 4px;}
+
+/* transition flash on language change */
+.lang-flash{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at center,rgba(0,229,255,.15),transparent 70%);
+  pointer-events:none;z-index:10;
+  opacity:0;transition:opacity .15s;
+  border-radius:4px;
+}
+.lang-flash.show{opacity:1;}
+
+/* RTL support */
+[dir="rtl"] .brand-row,[dir="rtl"] .c-line,[dir="rtl"] .feat,[dir="rtl"] .hl-pre{flex-direction:row-reverse;}
+[dir="rtl"] .hl-pre::before{display:none;}
+[dir="rtl"] .hl-pre::after{content:'';flex:0 0 24px;height:1px;background:var(--fire);}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes popUp{from{opacity:0;transform:scale(.8) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes scanMove{from{background-position:0 0}to{background-position:0 100px}}
+@keyframes glitch1{0%,92%,100%{opacity:0;transform:translate(0)}93%{opacity:.7;transform:translate(-3px,1px)}95%{opacity:0}97%{opacity:.5;transform:translate(3px,-1px)}99%{opacity:0}}
+@keyframes glitch2{0%,92%,100%{opacity:0;transform:translate(0)}94%{opacity:.5;transform:translate(3px,0)}96%{opacity:0}98%{opacity:.4;transform:translate(-2px,1px)}100%{opacity:0}}
+@keyframes hexRotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes langIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+<canvas id="bg"></canvas>
+
+<!-- LANG SWITCHER -->
+<div class="lang-switcher">
+  <button class="lang-toggle" onclick="toggleLangMenu()">🌐 LANGUAGE ▾</button>
+  <div class="lang-list" id="langList"></div>
+</div>
+
+<div class="scene">
+  <div class="card">
+    <div class="card-inner">
+      <div class="lang-flash" id="langFlash"></div>
+
+      <div class="top-bar">
+        <span class="sys-id">SYS // RKS-2025-DIGITAL</span>
+        <span class="status"><span class="pulse-dot"></span><span id="statusText">LIVE & ACTIVE</span></span>
+      </div>
+
+      <div class="hero">
+        <div class="brand-row">
+          <div class="logo-hex">
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="26,2 48,14 48,38 26,50 4,38 4,14" fill="rgba(0,229,255,.06)" stroke="rgba(0,229,255,.4)" stroke-width="1"/>
+              <polygon points="26,10 40,18 40,34 26,42 12,34 12,18" fill="none" stroke="rgba(255,77,0,.25)" stroke-width=".8" style="animation:hexRotate 12s linear infinite;transform-origin:26px 26px"/>
+              <text x="17" y="33" font-family="Black Han Sans,sans-serif" font-size="18" fill="url(#rg)" letter-spacing="1">R</text>
+              <circle cx="38" cy="14" r="2.5" fill="#ff4d00" opacity=".9"/>
+              <circle cx="38" cy="14" r="5" fill="none" stroke="rgba(255,77,0,.3)" stroke-width="1" style="animation:pulseDot 2s ease-in-out infinite"/>
+              <defs>
+                <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#aaff00"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="brand-info">
+            <div class="name">RKSINFRA</div>
+            <div class="sub" id="brandSub">Digital · Web · Marketing</div>
+          </div>
+          <div class="lang-badge" id="langBadge">
+            <span class="flag" id="langFlag">🇺🇸</span>
+            <span id="langName">EN</span>
+          </div>
+        </div>
+
+        <div class="headline-block">
+          <div class="hl-pre" id="hlPre">Digital Growth</div>
+          <div class="hl-main">
+            <span class="w1" id="hw1">GROW</span>
+            <span class="w2" id="hw2">ONLINE</span>
+            <span class="w3" id="hw3">NOW.</span>
+          </div>
+          <p class="hl-sub" id="hlSub">Websites, apps &amp; marketing that actually work — fast delivery, clean design, real results.</p>
+        </div>
+
+        <div class="svcs">
+          <div class="svc">
+            <div class="svc-num">01</div>
+            <span class="svc-icon">🌐</span>
+            <div class="svc-name" id="svc1name">Website</div>
+            <div class="svc-desc" id="svc1desc">Corporate · Portfolio · Ecommerce</div>
+          </div>
+          <div class="svc">
+            <div class="svc-num">02</div>
+            <span class="svc-icon">📱</span>
+            <div class="svc-name" id="svc2name">App Dev</div>
+            <div class="svc-desc" id="svc2desc">Android · iOS · Admin Panels</div>
+          </div>
+          <div class="svc">
+            <div class="svc-num">03</div>
+            <span class="svc-icon">📈</span>
+            <div class="svc-name" id="svc3name">Marketing</div>
+            <div class="svc-desc" id="svc3desc">SEO · Google Ads · Social Media</div>
+          </div>
+        </div>
+
+        <div class="feat-row">
+          <div class="feat"><div class="feat-icon">⚡</div><span id="f1">Fast Delivery</span></div>
+          <div class="feat"><div class="feat-icon">📲</div><span id="f2">Mobile First</span></div>
+          <div class="feat"><div class="feat-icon">🔍</div><span id="f3">SEO Optimized</span></div>
+          <div class="feat"><div class="feat-icon">🎨</div><span id="f4">Clean Design</span></div>
+          <div class="feat"><div class="feat-icon">🛡</div><span id="f5">Secure & Reliable</span></div>
+          <div class="feat"><div class="feat-icon">💬</div><span id="f6">24/7 Support</span></div>
+        </div>
+
+        <div class="cta-block">
+          <button class="btn btn-call" id="btnCall" onclick="window.open('tel:+917065219519')">📞 CALL NOW</button>
+          <button class="btn btn-wa" id="btnWa" onclick="window.open('https://wa.me/917065219519')">💬 WHATSAPP</button>
+        </div>
+
+        <div class="contact-row">
+          <div class="c-line"><span class="c-label" id="lTel">TEL</span><span class="c-val">+91 70652 19519</span></div>
+          <div class="c-line"><span class="c-label" id="lMail">MAIL</span><span class="c-val">contact@rksinfra.com</span></div>
+          <div class="c-line"><span class="c-label" id="lWeb">WEB</span><span class="c-val">rksinfra.com</span></div>
+        </div>
+      </div>
+
+      <div class="ticker-wrap">
+        <div class="ticker" id="ticker">
+          <span class="t-item" id="tk1">Website Development</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk2">App Development</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk3">Digital Marketing</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk4">SEO Optimization</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk5">Social Media</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk6">Lead Generation</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk7">Brand Identity</span><span class="t-sep">◆</span>
+          <!-- dupe for seamless loop -->
+          <span class="t-item" id="tk1b">Website Development</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk2b">App Development</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk3b">Digital Marketing</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk4b">SEO Optimization</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk5b">Social Media</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk6b">Lead Generation</span><span class="t-sep">◆</span>
+          <span class="t-item" id="tk7b">Brand Identity</span><span class="t-sep">◆</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// TRANSLATIONS — 12 International Languages
+// ═══════════════════════════════════════════
+const LANGS = {
+  en: {
+    flag:'🇺🇸', name:'EN', label:'English', dir:'ltr',
+    statusText:'LIVE & ACTIVE',
+    brandSub:'Digital · Web · Marketing',
+    hlPre:'Digital Growth',
+    hw1:'GROW', hw2:'ONLINE', hw3:'NOW.',
+    hlSub:'Websites, apps & marketing that actually work — fast delivery, clean design, real results.',
+    svc1name:'Website', svc1desc:'Corporate · Portfolio · Ecommerce',
+    svc2name:'App Dev', svc2desc:'Android · iOS · Admin Panels',
+    svc3name:'Marketing', svc3desc:'SEO · Google Ads · Social Media',
+    f1:'Fast Delivery', f2:'Mobile First', f3:'SEO Optimized',
+    f4:'Clean Design', f5:'Secure & Reliable', f6:'24/7 Support',
+    btnCall:'📞 CALL NOW', btnWa:'💬 WHATSAPP',
+    lTel:'TEL', lMail:'MAIL', lWeb:'WEB',
+    tk:['Website Dev','App Development','Digital Marketing','SEO Optimization','Social Media','Lead Generation','Brand Identity']
+  },
+  es: {
+    flag:'🇪🇸', name:'ES', label:'Español', dir:'ltr',
+    statusText:'EN VIVO',
+    brandSub:'Digital · Web · Marketing',
+    hlPre:'Crecimiento Digital',
+    hw1:'CRECER', hw2:'EN LÍNEA', hw3:'AHORA.',
+    hlSub:'Sitios web, apps y marketing que realmente funcionan — entrega rápida, diseño limpio, resultados reales.',
+    svc1name:'Sitio Web', svc1desc:'Corporativo · Portafolio · Ecommerce',
+    svc2name:'App Dev', svc2desc:'Android · iOS · Paneles Admin',
+    svc3name:'Marketing', svc3desc:'SEO · Google Ads · Redes Sociales',
+    f1:'Entrega Rápida', f2:'Primero Móvil', f3:'SEO Optimizado',
+    f4:'Diseño Limpio', f5:'Seguro y Confiable', f6:'Soporte 24/7',
+    btnCall:'📞 LLAMAR', btnWa:'💬 WHATSAPP',
+    lTel:'TEL', lMail:'CORREO', lWeb:'WEB',
+    tk:['Desarrollo Web','Desarrollo App','Marketing Digital','Optimización SEO','Redes Sociales','Generación Leads','Identidad de Marca']
+  },
+  id: {
+    flag:'🇮🇩', name:'ID', label:'Indonesia', dir:'ltr',
+    statusText:'AKTIF',
+    brandSub:'Digital · Web · Pemasaran',
+    hlPre:'Pertumbuhan Digital',
+    hw1:'BERKEMBANG', hw2:'ONLINE', hw3:'SEKARANG.',
+    hlSub:'Website, aplikasi & pemasaran yang benar-benar bekerja — pengiriman cepat, desain bersih, hasil nyata.',
+    svc1name:'Website', svc1desc:'Korporat · Portofolio · Ecommerce',
+    svc2name:'Aplikasi', svc2desc:'Android · iOS · Panel Admin',
+    svc3name:'Pemasaran', svc3desc:'SEO · Google Ads · Media Sosial',
+    f1:'Pengiriman Cepat', f2:'Mobile Pertama', f3:'Dioptimalkan SEO',
+    f4:'Desain Bersih', f5:'Aman & Andal', f6:'Dukungan 24/7',
+    btnCall:'📞 TELEPON', btnWa:'💬 WHATSAPP',
+    lTel:'TEL', lMail:'EMAIL', lWeb:'WEB',
+    tk:['Pengembangan Web','Pengembangan App','Pemasaran Digital','Optimasi SEO','Media Sosial','Generasi Lead','Identitas Merek']
+  },
+  fr: {
+    flag:'🇫🇷', name:'FR', label:'Français', dir:'ltr',
+    statusText:'EN DIRECT',
+    brandSub:'Digital · Web · Marketing',
+    hlPre:'Croissance Digitale',
+    hw1:'CROÎTRE', hw2:'EN LIGNE', hw3:'MAINTENANT.',
+    hlSub:'Sites web, applis & marketing qui fonctionnent vraiment — livraison rapide, design propre, vrais résultats.',
+    svc1name:'Site Web', svc1desc:'Corporate · Portfolio · E-commerce',
+    svc2name:'App Dev', svc2desc:'Android · iOS · Panneaux Admin',
+    svc3name:'Marketing', svc3desc:'SEO · Google Ads · Réseaux Sociaux',
+    f1:'Livraison Rapide', f2:'Mobile d\'abord', f3:'SEO Optimisé',
+    f4:'Design Propre', f5:'Sécurisé & Fiable', f6:'Support 24/7',
+    btnCall:'📞 APPELER', btnWa:'💬 WHATSAPP',
+    lTel:'TÉL', lMail:'EMAIL', lWeb:'WEB',
+    tk:['Développement Web','Développement App','Marketing Digital','Optimisation SEO','Réseaux Sociaux','Génération Leads','Identité de Marque']
+  },
+  pt: {
+    flag:'🇧🇷', name:'PT', label:'Português', dir:'ltr',
+    statusText:'AO VIVO',
+    brandSub:'Digital · Web · Marketing',
+    hlPre:'Crescimento Digital',
+    hw1:'CRESCER', hw2:'ONLINE', hw3:'AGORA.',
+    hlSub:'Sites, apps e marketing que realmente funcionam — entrega rápida, design limpo, resultados reais.',
+    svc1name:'Website', svc1desc:'Corporativo · Portfólio · E-commerce',
+    svc2name:'App Dev', svc2desc:'Android · iOS · Painéis Admin',
+    svc3name:'Marketing', svc3desc:'SEO · Google Ads · Redes Sociais',
+    f1:'Entrega Rápida', f2:'Mobile Primeiro', f3:'SEO Otimizado',
+    f4:'Design Limpo', f5:'Seguro & Confiável', f6:'Suporte 24/7',
+    btnCall:'📞 LIGAR', btnWa:'💬 WHATSAPP',
+    lTel:'TEL', lMail:'EMAIL', lWeb:'WEB',
+    tk:['Desenvolvimento Web','Desenvolvimento App','Marketing Digital','Otimização SEO','Redes Sociais','Geração de Leads','Identidade de Marca']
+  },
+  de: {
+    flag:'🇩🇪', name:'DE', label:'Deutsch', dir:'ltr',
+    statusText:'AKTIV',
+    brandSub:'Digital · Web · Marketing',
+    hlPre:'Digitales Wachstum',
+    hw1:'WACHSEN', hw2:'ONLINE', hw3:'JETZT.',
+    hlSub:'Websites, Apps & Marketing, die wirklich funktionieren — schnelle Lieferung, sauberes Design, echte Ergebnisse.',
+    svc1name:'Website', svc1desc:'Unternehmen · Portfolio · E-Commerce',
+    svc2name:'App-Entw.', svc2desc:'Android · iOS · Admin-Panels',
+    svc3name:'Marketing', svc3desc:'SEO · Google Ads · Social Media',
+    f1:'Schnelle Lieferung', f2:'Mobile-First', f3:'SEO-Optimiert',
+    f4:'Sauberes Design', f5:'Sicher & Zuverlässig', f6:'24/7 Support',
+    btnCall:'📞 ANRUFEN', btnWa:'💬 WHATSAPP',
+    lTel:'TEL', lMail:'EMAIL', lWeb:'WEB',
+    tk:['Webentwicklung','App-Entwicklung','Digitales Marketing','SEO-Optimierung','Soziale Medien','Lead-Generierung','Markenidentität']
+  },
+  ar: {
+    flag:'🇸🇦', name:'AR', label:'العربية', dir:'rtl',
+    statusText:'مباشر',
+    brandSub:'رقمي · ويب · تسويق',
+    hlPre:'النمو الرقمي',
+    hw1:'انمُ', hw2:'أونلاين', hw3:'الآن.',
+    hlSub:'مواقع وتطبيقات وتسويق يعملان فعلاً — تسليم سريع، تصميم نظيف، نتائج حقيقية.',
+    svc1name:'موقع ويب', svc1desc:'شركات · محفظة · تجارة إلك',
+    svc2name:'تطبيقات', svc2desc:'أندرويد · iOS · لوحات تحكم',
+    svc3name:'تسويق', svc3desc:'SEO · إعلانات · سوشيال ميديا',
+    f1:'تسليم سريع', f2:'الموبايل أولاً', f3:'محسَّن لـ SEO',
+    f4:'تصميم نظيف', f5:'آمن وموثوق', f6:'دعم ٢٤/٧',
+    btnCall:'📞 اتصل الآن', btnWa:'💬 واتساب',
+    lTel:'هاتف', lMail:'بريد', lWeb:'ويب',
+    tk:['تطوير مواقع','تطوير تطبيقات','تسويق رقمي','تحسين SEO','سوشيال ميديا','توليد عملاء','هوية العلامة']
+  },
+  zh: {
+    flag:'🇨🇳', name:'ZH', label:'中文', dir:'ltr',
+    statusText:'实时在线',
+    brandSub:'数字 · 网站 · 营销',
+    hlPre:'数字增长',
+    hw1:'增长', hw2:'在线', hw3:'现在。',
+    hlSub:'网站、应用程序和营销真正有效 — 快速交付、简洁设计、真实结果。',
+    svc1name:'网站开发', svc1desc:'企业 · 作品集 · 电商',
+    svc2name:'应用开发', svc2desc:'安卓 · iOS · 管理面板',
+    svc3name:'数字营销', svc3desc:'SEO · 谷歌广告 · 社交媒体',
+    f1:'快速交付', f2:'移动优先', f3:'SEO优化',
+    f4:'简洁设计', f5:'安全可靠', f6:'24/7支持',
+    btnCall:'📞 立即致电', btnWa:'💬 WHATSAPP',
+    lTel:'电话', lMail:'邮件', lWeb:'网站',
+    tk:['网站开发','应用开发','数字营销','SEO优化','社交媒体','潜在客户','品牌标识']
+  },
+  ja: {
+    flag:'🇯🇵', name:'JA', label:'日本語', dir:'ltr',
+    statusText:'ライブ中',
+    brandSub:'デジタル · ウェブ · マーケティング',
+    hlPre:'デジタル成長',
+    hw1:'成長する', hw2:'オンライン', hw3:'今すぐ。',
+    hlSub:'実際に機能するウェブサイト、アプリ、マーケティング — 迅速な納品、清潔なデザイン、本物の結果。',
+    svc1name:'ウェブサイト', svc1desc:'企業 · ポートフォリオ · EC',
+    svc2name:'アプリ開発', svc2desc:'Android · iOS · 管理画面',
+    svc3name:'マーケティング', svc3desc:'SEO · Google広告 · SNS',
+    f1:'迅速な納品', f2:'モバイルファースト', f3:'SEO最適化',
+    f4:'クリーンデザイン', f5:'安全で信頼性', f6:'24/7サポート',
+    btnCall:'📞 今すぐ電話', btnWa:'💬 WhatsApp',
+    lTel:'電話', lMail:'メール', lWeb:'ウェブ',
+    tk:['ウェブ開発','アプリ開発','デジタルマーケティング','SEO最適化','ソーシャルメディア','リード獲得','ブランドアイデンティティ']
+  },
+  ko: {
+    flag:'🇰🇷', name:'KO', label:'한국어', dir:'ltr',
+    statusText:'라이브',
+    brandSub:'디지털 · 웹 · 마케팅',
+    hlPre:'디지털 성장',
+    hw1:'성장하라', hw2:'온라인', hw3:'지금.',
+    hlSub:'실제로 작동하는 웹사이트, 앱 & 마케팅 — 빠른 납품, 깔끔한 디자인, 실제 결과.',
+    svc1name:'웹사이트', svc1desc:'기업 · 포트폴리오 · 이커머스',
+    svc2name:'앱 개발', svc2desc:'안드로이드 · iOS · 관리자 패널',
+    svc3name:'마케팅', svc3desc:'SEO · 구글 광고 · 소셜미디어',
+    f1:'빠른 납품', f2:'모바일 우선', f3:'SEO 최적화',
+    f4:'깔끔한 디자인', f5:'안전 & 신뢰', f6:'24/7 지원',
+    btnCall:'📞 지금 전화', btnWa:'💬 WhatsApp',
+    lTel:'전화', lMail:'이메일', lWeb:'웹',
+    tk:['웹 개발','앱 개발','디지털 마케팅','SEO 최적화','소셜 미디어','리드 생성','브랜드 아이덴티티']
+  },
+  ru: {
+    flag:'🇷🇺', name:'RU', label:'Русский', dir:'ltr',
+    statusText:'В ЭФИРЕ',
+    brandSub:'Цифровой · Веб · Маркетинг',
+    hlPre:'Цифровой Рост',
+    hw1:'РАСТИ', hw2:'ОНЛАЙН', hw3:'СЕЙЧАС.',
+    hlSub:'Сайты, приложения и маркетинг, которые реально работают — быстрая доставка, чистый дизайн, настоящие результаты.',
+    svc1name:'Веб-сайт', svc1desc:'Корпоратив · Портфолио · Интернет-магазин',
+    svc2name:'Разработка', svc2desc:'Android · iOS · Панели Admin',
+    svc3name:'Маркетинг', svc3desc:'SEO · Google Ads · Соцсети',
+    f1:'Быстрая Доставка', f2:'Mobile-First', f3:'SEO Оптимизация',
+    f4:'Чистый Дизайн', f5:'Надёжно & Безопасно', f6:'Поддержка 24/7',
+    btnCall:'📞 ПОЗВОНИТЬ', btnWa:'💬 WHATSAPP',
+    lTel:'ТЕЛ', lMail:'ПОЧТА', lWeb:'ВЕБ',
+    tk:['Веб-разработка','Разработка App','Цифровой Маркетинг','SEO Оптимизация','Соц. Сети','Лидогенерация','Бренд Айдентика']
+  },
+  tr: {
+    flag:'🇹🇷', name:'TR', label:'Türkçe', dir:'ltr',
+    statusText:'CANLI',
+    brandSub:'Dijital · Web · Pazarlama',
+    hlPre:'Dijital Büyüme',
+    hw1:'BÜYÜ', hw2:'ÇEVRİMİÇİ', hw3:'ŞİMDİ.',
+    hlSub:'Gerçekten işe yarayan web siteleri, uygulamalar & pazarlama — hızlı teslimat, temiz tasarım, gerçek sonuçlar.',
+    svc1name:'Web Sitesi', svc1desc:'Kurumsal · Portföy · E-ticaret',
+    svc2name:'Uygulama', svc2desc:'Android · iOS · Yönetim Paneli',
+    svc3name:'Pazarlama', svc3desc:'SEO · Google Ads · Sosyal Medya',
+    f1:'Hızlı Teslimat', f2:'Mobil Önce', f3:'SEO Optimizasyonu',
+    f4:'Temiz Tasarım', f5:'Güvenli & Güvenilir', f6:'7/24 Destek',
+    btnCall:'📞 ŞIMDI ARA', btnWa:'💬 WHATSAPP',
+    lTel:'TEL', lMail:'E-POSTA', lWeb:'WEB',
+    tk:['Web Geliştirme','Uygulama Geliştirme','Dijital Pazarlama','SEO Optimizasyonu','Sosyal Medya','Müşteri Adayı','Marka Kimliği']
+  }
+};
+
+// ── DETECT LANGUAGE
+function detectLang(){
+  const bl = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  const map = {
+    'es':'es','fr':'fr','de':'de','pt':'pt','ar':'ar',
+    'zh':'zh','ja':'ja','ko':'ko','ru':'ru','tr':'tr',
+    'id':'id','ms':'id'
+  };
+  for(const [k,v] of Object.entries(map)){
+    if(bl.startsWith(k)) return v;
+  }
+  return 'en';
+}
+
+// ── BUILD LANG MENU
+function buildMenu(){
+  const list = document.getElementById('langList');
+  Object.entries(LANGS).forEach(([code,l])=>{
+    const btn = document.createElement('button');
+    btn.className='lang-btn';
+    btn.id='lb-'+code;
+    btn.innerHTML=`<span class="lang-flag">${l.flag}</span>${l.label}`;
+    btn.onclick=()=>applyLang(code);
+    list.appendChild(btn);
+  });
+}
+
+function toggleLangMenu(){
+  const l=document.getElementById('langList');
+  l.classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.lang-switcher')){
+    document.getElementById('langList').classList.remove('open');
+  }
+});
+
+// ── APPLY LANGUAGE
+function applyLang(code){
+  const l = LANGS[code];
+  if(!l) return;
+
+  // flash effect
+  const flash = document.getElementById('langFlash');
+  flash.classList.add('show');
+  setTimeout(()=>flash.classList.remove('show'),300);
+
+  // set dir
+  document.documentElement.dir = l.dir;
+  document.documentElement.lang = code;
+
+  // update text nodes
+  const ids = ['statusText','brandSub','hlPre','hw1','hw2','hw3','hlSub',
+    'svc1name','svc1desc','svc2name','svc2desc','svc3name','svc3desc',
+    'f1','f2','f3','f4','f5','f6','btnCall','btnWa','lTel','lMail','lWeb'];
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=l[id]||'';
+  });
+
+  // ticker
+  l.tk.forEach((t,i)=>{
+    const a=document.getElementById('tk'+(i+1));
+    const b=document.getElementById('tk'+(i+1)+'b');
+    if(a) a.textContent=t;
+    if(b) b.textContent=t;
+  });
+
+  // badge
+  document.getElementById('langFlag').textContent = l.flag;
+  document.getElementById('langName').textContent = l.name;
+
+  // active btn
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  const ab=document.getElementById('lb-'+code);
+  if(ab) ab.classList.add('active');
+
+  // arabic font
+  if(code==='ar'||code==='ja'||code==='zh'||code==='ko'){
+    document.querySelector('.hero').style.fontFamily = "'Noto Sans JP','Noto Sans Arabic','Noto Sans KR','Syne',sans-serif";
+  } else {
+    document.querySelector('.hero').style.fontFamily = "";
+  }
+
+  // animate sub
+  const sub=document.getElementById('hlSub');
+  const text=sub.textContent;
+  sub.textContent='';
+  let i=0;
+  const t=setInterval(()=>{
+    if(i<text.length){sub.textContent+=text[i++];}
+    else clearInterval(t);
+  },18);
+
+  document.getElementById('langList').classList.remove('open');
+}
+
+// ── INIT
+buildMenu();
+const detected = detectLang();
+applyLang(detected);
+
+// ── CURSOR
+const cur=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=(e.clientX-7)+'px';cur.style.top=(e.clientY-7)+'px';
+  setTimeout(()=>{
+    document.getElementById('cursor-trail').style.left=(e.clientX-18)+'px';
+    document.getElementById('cursor-trail').style.top=(e.clientY-18)+'px';
+  },60);
+});
+document.addEventListener('mousedown',()=>cur.style.transform='scale(2)');
+document.addEventListener('mouseup',()=>cur.style.transform='scale(1)');
+
+// ── CANVAS BG
+const canvas=document.getElementById('bg');
+const ctx2=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
+window.addEventListener('resize',resize);resize();
+const PARTICLES=[];
+for(let i=0;i<90;i++){
+  PARTICLES.push({x:Math.random()*1920,y:Math.random()*1080,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.2+.2,a:Math.random()*.7+.1,c:Math.random()>.5?'0,229,255':'255,77,0',t:Math.random()*Math.PI*2});
+}
+let at=0;
+function draw(){
+  ctx2.fillStyle='rgba(0,5,9,.18)';ctx2.fillRect(0,0,W,H);
+  ctx2.strokeStyle='rgba(0,229,255,0.025)';ctx2.lineWidth=1;
+  for(let x=0;x<W;x+=60){ctx2.beginPath();ctx2.moveTo(x,0);ctx2.lineTo(x,H);ctx2.stroke();}
+  for(let y=0;y<H;y+=60){ctx2.beginPath();ctx2.moveTo(0,y);ctx2.lineTo(W,y);ctx2.stroke();}
+  at+=.004;
+  [[W*.15+Math.sin(at)*W*.05,H*.1,'rgba(0,100,255,.09)',W*.5],[W*.85+Math.cos(at*.8)*W*.06,H*.85,'rgba(255,60,0,.07)',W*.4]].forEach(([gx,gy,c,r])=>{
+    const g=ctx2.createRadialGradient(gx,gy,0,gx,gy,r);
+    g.addColorStop(0,c);g.addColorStop(1,'transparent');
+    ctx2.fillStyle=g;ctx2.fillRect(0,0,W,H);
+  });
+  PARTICLES.forEach(p=>{
+    p.t+=.015;p.a=.15+.55*(Math.sin(p.t)*.5+.5);
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    ctx2.beginPath();ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx2.fillStyle=`rgba(${p.c},${p.a})`;ctx2.fill();
+  });
+  for(let i=0;i<PARTICLES.length;i++){
+    for(let j=i+1;j<PARTICLES.length;j++){
+      const dx=PARTICLES[i].x-PARTICLES[j].x,dy=PARTICLES[i].y-PARTICLES[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        ctx2.strokeStyle=`rgba(0,229,255,${(.4-d/120)*.35})`;ctx2.lineWidth=.5;
+        ctx2.beginPath();ctx2.moveTo(PARTICLES[i].x,PARTICLES[i].y);ctx2.lineTo(PARTICLES[j].x,PARTICLES[j].y);ctx2.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+document.addEventListener('mousemove',e=>{
+  PARTICLES.forEach(p=>{
+    const dx=e.clientX-p.x,dy=e.clientY-p.y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<80){p.vx-=dx/d*.3;p.vy-=dy/d*.3;const s=Math.sqrt(p.vx*p.vx+p.vy*p.vy);if(s>2){p.vx=p.vx/s*2;p.vy=p.vy/s*2;}}
+  });
+});
+</script>
+</body>
+</html>
